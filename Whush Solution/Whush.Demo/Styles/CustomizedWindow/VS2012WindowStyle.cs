@@ -102,6 +102,26 @@ namespace Whush.Demo.Styles.CustomizedWindow
             }
         }
 
+        void TitleBarMouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                sender.ForWindowFromTemplate(w =>
+                    {
+                        if (w.WindowState == WindowState.Maximized)
+                        {
+                            var mouse1 = e.MouseDevice.GetPosition(w);
+                            var width1 = w.ActualWidth;
+                            w.WindowState = WindowState.Normal;
+                            var width2 = w.ActualWidth;
+                            w.Left = mouse1.X * (1 - width2 / width1);
+                            w.Top = 0;
+                            w.DragMove();
+                        }
+                    });
+            }
+        }
+
         #endregion
 
         #region P/Invoke

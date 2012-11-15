@@ -82,6 +82,7 @@
                                     Background="{StaticResource TitleBarBackgroundBrush}"
                                     BorderThickness="0"
                                     MouseLeftButtonDown="TitleBarMouseLeftButtonDown"
+                                    MouseMove="TitleBarMouseMove"
                                     >
                                     <Grid Height="32">
                                         <Grid.ColumnDefinitions>
