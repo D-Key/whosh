@@ -110,12 +110,13 @@ namespace Whush.Demo.Styles.CustomizedWindow
                     {
                         if (w.WindowState == WindowState.Maximized)
                         {
+                            double adjustment = 20.0;
                             var mouse1 = e.MouseDevice.GetPosition(w);
-                            var width1 = w.ActualWidth;
+                            var width1 = w.ActualWidth + 2 * adjustment;
                             w.WindowState = WindowState.Normal;
                             var width2 = w.ActualWidth;
-                            w.Left = mouse1.X * (1 - width2 / width1);
-                            w.Top = 0;
+                            w.Left = mouse1.X * (1 - width2 / width1) - adjustment;
+                            w.Top = -7;
                             w.DragMove();
                         }
                     });
