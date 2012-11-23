@@ -7,7 +7,7 @@
     Width="300"
     MinHeight="160"
     MinWidth="260"
-    Icon="/mainicon.ico"
+    Icon="/icon766b.ico"
     Style="{StaticResource VS2012WindowStyle}"
     >
     <DockPanel>

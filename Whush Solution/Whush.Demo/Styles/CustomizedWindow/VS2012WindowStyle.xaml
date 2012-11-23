@@ -51,11 +51,14 @@
                     between maximized window and screen edges; smaller numbers show parts of
                     the window outside of the current monitor on multi-display computers.
                     -->
-                    <Grid
-                        Margin="7"
+                    <Border
+                        x:Name="PART_Container"
+                        Padding="7"
+                        >
+                        <Grid
                         TextOptions.TextRenderingMode="ClearType"
                         TextOptions.TextFormattingMode="Display">
-                        <Border
+                            <Border
                             x:Name="PART_Border"
                             Width="Auto"
                             Height="Auto"
@@ -63,20 +66,12 @@
                             BorderBrush="{StaticResource VS2012WindowBorderBrush}"
                             BorderThickness="1"
                             Padding="0">
-                            <Border.Effect>
-                                <DropShadowEffect
-                                    Color="black"
-                                    Opacity="0.5"
-                                    BlurRadius="7"
-                                    ShadowDepth="2"
-                                    Direction="315"/>
-                            </Border.Effect>
-                            <DockPanel   
+                                <DockPanel   
                                 HorizontalAlignment="Stretch"
                                 Background="Transparent"
                                 VerticalAlignment="Stretch"
                                 >
-                                <Border
+                                    <Border
                                     x:Name="TitleBar"
                                     DockPanel.Dock="Top"
                                     Background="{StaticResource TitleBarBackgroundBrush}"
@@ -84,15 +79,15 @@
                                     MouseLeftButtonDown="TitleBarMouseLeftButtonDown"
                                     MouseMove="TitleBarMouseMove"
                                     >
-                                    <Grid Height="32">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="36"/>
-                                            <ColumnDefinition />
-                                            <ColumnDefinition Width="34"/>
-                                            <ColumnDefinition Width="34"/>
-                                            <ColumnDefinition Width="34"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Image
+                                        <Grid Height="32">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="36"/>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="34"/>
+                                                <ColumnDefinition Width="34"/>
+                                                <ColumnDefinition Width="34"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Image
                                             x:Name="Icon"
                                             Grid.Column="0"
                                             Source="{Binding Path=Icon, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" 
@@ -102,7 +97,7 @@
                                             Height="32"
                                             MouseLeftButtonDown="IconMouseLeftButtonDown"
                                             />
-                                        <TextBlock
+                                            <TextBlock
                                             x:Name="Caption"
                                             Grid.Column="1"
                                             HorizontalAlignment="Left"
@@ -113,7 +108,7 @@
                                             Opacity="0.66"
                                             Text="{Binding Path=Title, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
                                             />
-                                        <Button
+                                            <Button
                                             x:Name="MinButton" 
                                             Grid.Column="2"
                                             VerticalAlignment="Top"
@@ -122,17 +117,17 @@
                                             Style="{StaticResource VS2012WindowStyleTitleBarButton}"
                                             Click="MinButtonClick"
                                             >
-                                            <Grid MaxHeight="9" MaxWidth="9">
-                                                <Path
+                                                <Grid MaxHeight="9" MaxWidth="9">
+                                                    <Path
                                                     Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
                                                     StrokeThickness="1"
                                                     Stretch="None"
                                                     RenderOptions.EdgeMode="Aliased"
                                                     Data="M0,8 H8 M0,7 H8 M0,6 H8"
                                                     />
-                                            </Grid>
-                                        </Button>
-                                        <Button
+                                                </Grid>
+                                            </Button>
+                                            <Button
                                             Grid.Column="3"
                                             x:Name="MaxButton" 
                                             VerticalAlignment="Top"
@@ -141,8 +136,8 @@
                                             Style="{StaticResource VS2012WindowStyleTitleBarButton}"
                                             Click="MaxButtonClick"
                                             >
-                                            <Grid MaxHeight="9" MaxWidth="9">
-                                                <Path
+                                                <Grid MaxHeight="9" MaxWidth="9">
+                                                    <Path
                                                     x:Name="PART_MaxButton_Path"
                                                     Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
                                                     StrokeThickness="1"
@@ -150,9 +145,9 @@
                                                     RenderOptions.EdgeMode="Aliased"
                                                     Data="M0,0 H8 V8 H0 V0 M0,1 H8 M0,2 H8"
                                                     />
-                                            </Grid>
-                                        </Button>
-                                        <Button
+                                                </Grid>
+                                            </Button>
+                                            <Button
                                             Grid.Column="4"
                                             x:Name="CloseButton" 
                                             VerticalAlignment="Top"
@@ -161,21 +156,21 @@
                                             Style="{StaticResource VS2012WindowStyleTitleBarButton}"
                                             Click="CloseButtonClick"
                                             >
-                                            <Grid MaxHeight="9" MaxWidth="9">
-                                                <Path
+                                                <Grid MaxHeight="9" MaxWidth="9">
+                                                    <Path
                                                     Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
                                                     StrokeThickness="1.5"
                                                     Stretch="None"
                                                     Data="M0,0 L8,8 M0,8 L8,0"
                                                     />
-                                            </Grid>
-                                        </Button>
-                                    </Grid>
-                                </Border>
-                                <ContentPresenter />
-                            </DockPanel>
-                        </Border>
-                        <Line
+                                                </Grid>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                    <ContentPresenter />
+                                </DockPanel>
+                            </Border>
+                            <Line
                             MouseDown="OnSizeNorth"
                             x:Name="lnSizeNorth"
                             Stroke="Transparent"   
@@ -183,7 +178,7 @@
                             X1="1" X2="{TemplateBinding ActualWidth}" Y1="1" Y2="1"
                             StrokeThickness="3"
                             />
-                        <Line
+                            <Line
                             MouseDown="OnSizeSouth"
                             x:Name="lnSizeSouth"
                             Stroke="Transparent"
@@ -192,7 +187,7 @@
                             X1="1" X2="{TemplateBinding ActualWidth}" Y1="{TemplateBinding ActualHeight}" Y2="{TemplateBinding ActualHeight}"
                             StrokeThickness="3"
                             />
-                        <Line
+                            <Line
                             MouseDown="OnSizeWest"
                             x:Name="lnSizeWest"
                             Stroke="Transparent"
@@ -200,7 +195,7 @@
                             X1="1" X2="1" Y1="1" Y2="{TemplateBinding ActualHeight}"
                             StrokeThickness="3"
                             />
-                        <Line
+                            <Line
                             MouseDown="OnSizeEast"
                             x:Name="lnSizeEast"
                             Stroke="Transparent"
@@ -209,14 +204,27 @@
                             X1="{TemplateBinding ActualWidth}" X2="{TemplateBinding ActualWidth}" Y1="1" Y2="{TemplateBinding ActualHeight}"
                             StrokeThickness="3"
                             />
-                        <Rectangle MouseDown="OnSizeNorthWest" x:Name="rectSizeNorthWest" Cursor="SizeNWSE" Fill="Transparent" Width="5" Height="5" VerticalAlignment="Top" HorizontalAlignment="Left" />
-                        <Rectangle MouseDown="OnSizeNorthEast" x:Name="rectSizeNorthEast" Cursor="SizeNESW" Fill="Transparent" Width="5" Height="5" VerticalAlignment="Top" HorizontalAlignment="Right" />
-                        <Rectangle MouseDown="OnSizeSouthWest" x:Name="rectSizeSouthWest" Cursor="SizeNESW" Fill="Transparent" Width="5" Height="5" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
-                        <Rectangle MouseDown="OnSizeSouthEast" x:Name="rectSizeSouthEast" Cursor="SizeNWSE" Fill="Transparent" Width="5" Height="5" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
-                    </Grid>
+                            <Rectangle MouseDown="OnSizeNorthWest" x:Name="rectSizeNorthWest" Cursor="SizeNWSE" Fill="Transparent" Width="5" Height="5" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                            <Rectangle MouseDown="OnSizeNorthEast" x:Name="rectSizeNorthEast" Cursor="SizeNESW" Fill="Transparent" Width="5" Height="5" VerticalAlignment="Top" HorizontalAlignment="Right" />
+                            <Rectangle MouseDown="OnSizeSouthWest" x:Name="rectSizeSouthWest" Cursor="SizeNESW" Fill="Transparent" Width="5" Height="5" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
+                            <Rectangle MouseDown="OnSizeSouthEast" x:Name="rectSizeSouthEast" Cursor="SizeNWSE" Fill="Transparent" Width="5" Height="5" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+                        </Grid>
+                    </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="WindowState" Value="Maximized">
                             <Setter TargetName="PART_MaxButton_Path" Property="Data" Value="M0,3 H5 V8 H0 V3 M0,4 H5 M3,0 H8 V5 H7 M3,1 H8"/>
+                        </Trigger>
+                        <Trigger Property="WindowState" Value="Normal">
+                            <Setter TargetName="PART_Border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect
+                                        Color="black"
+                                        Opacity="0.5"
+                                        BlurRadius="7"
+                                        ShadowDepth="2"
+                                        Direction="315"/>
+                                </Setter.Value>
+                            </Setter>
                         </Trigger>
                         <Trigger Property="IsActive" Value="False">
                             <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource VS2012WindowBorderBrushInactive}"/>
@@ -227,11 +235,9 @@
         </Setter>
         <Style.Resources>
             <Style TargetType="{x:Type StatusBar}">
+                <Setter Property="Foreground" Value="{StaticResource VS2012WindowStatusForeground}" />
+                <Setter Property="Background" Value="{StaticResource VS2012WindowBorderBrush}" />
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource VS2012WindowStatusForeground}" />
-                        <Setter Property="Background" Value="{StaticResource VS2012WindowBorderBrush}" />
-                    </DataTrigger>
                     <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource AncestorType=Window}}" Value="False">
                         <Setter Property="Foreground" Value="{StaticResource VS2012WindowStatusForegroundInactive}" />
                         <Setter Property="Background" Value="{StaticResource VS2012WindowBorderBrushInactive}" />
