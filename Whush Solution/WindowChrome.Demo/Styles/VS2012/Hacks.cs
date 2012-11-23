@@ -17,17 +17,16 @@ namespace WindowChrome.Demo.Styles.VS2012
         /// <param name="wpfWindow"></param>
         public static void FixWpfMaximizePositioning(Window wpfWindow)
         {
-            wpfWindow.StateChanged += WindowStateChanged;
-            wpfWindow.LocationChanged += wpfWindow_LocationChanged;
-            wpfWindow.SizeChanged += wpfWindow_SizeChanged;
+            wpfWindow.LocationChanged += WindowLocationChanged;
+            wpfWindow.SizeChanged += WindowSizeChanged;
         }
 
-        static void wpfWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        static void WindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
             AdjustWindowWorkingZone((Window)sender);
         }
 
-        static void wpfWindow_LocationChanged(object sender, EventArgs e)
+        static void WindowLocationChanged(object sender, EventArgs e)
         {
             AdjustWindowWorkingZone((Window)sender);
         }
@@ -51,11 +50,6 @@ namespace WindowChrome.Demo.Styles.VS2012
                 element.PointToScreen(e.GetPosition(element)));
         }
 
-        static void WindowStateChanged(object sender, EventArgs e)
-        {
-            // AdjustWindowWorkingZone((Window)sender);
-        }
-
         static void AdjustWindowWorkingZone(Window w)
         {
             if (w.WindowStyle != WindowStyle.None) return;
@@ -64,7 +58,6 @@ namespace WindowChrome.Demo.Styles.VS2012
             {
                 // TODO: track Win+Shift+Left/Right move to another monitor
                 // Make sure window doesn't overlap with the taskbar
-                // containerBorder.Padding = Hacks.MaximizedWindowBorder().Add(Hacks.ScreenNonWorkingZone(w));
                 AdjustPaddingToWorkingArea(w, containerBorder);
             }
             else
@@ -105,11 +98,6 @@ namespace WindowChrome.Demo.Styles.VS2012
 
                         adjustmentInProgress = false;
                     }));
-        }
-
-        static void bw_DoWork(object sender, DoWorkEventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>

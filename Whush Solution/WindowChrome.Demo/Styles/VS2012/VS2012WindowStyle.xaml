@@ -5,7 +5,6 @@
 
     <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#EFEFF2" />
     <SolidColorBrush x:Key="VS2012WindowBorderBrush" Color="#007ACC" />
-    <SolidColorBrush x:Key="VS2012WindowBorderBrush4" Color="#0099DD" />
     <SolidColorBrush x:Key="VS2012WindowBorderBrushInactive" Color="#999999" />
     <SolidColorBrush x:Key="VS2012WindowStatusForeground" Color="#FFFFFF" />
     <SolidColorBrush x:Key="VS2012WindowStatusForegroundInactive" Color="#FFFFFF" />
@@ -59,7 +58,7 @@
                 <ControlTemplate TargetType="{x:Type Window}">
                     <Border
                         x:Name="PART_WindowContainer"
-                        Padding="7 7 5 5"
+                        Padding="7 7 7 5"
                         >
                     <Grid
                         TextOptions.TextRenderingMode="ClearType"
@@ -69,8 +68,8 @@
                             Width="Auto"
                             Height="Auto"
                             Background="#EFEFF2"
-                            BorderBrush="{StaticResource VS2012WindowBorderBrush4}"
-                            BorderThickness="4"
+                            BorderBrush="{StaticResource VS2012WindowBorderBrush}"
+                            BorderThickness="1"
                             Padding="0">
                             <DockPanel
                                 HorizontalAlignment="Stretch"
