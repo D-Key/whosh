@@ -15,7 +15,7 @@ namespace WindowChrome.Demo.Styles.VS2012
         /// Container will be positioned to fill an entire working are of the screen when the window is maximized.
         /// </summary>
         /// <param name="wpfWindow"></param>
-        public static void FixWpfMaximizePositioning(Window wpfWindow)
+        public static void FixWpfPositioning(Window wpfWindow)
         {
             wpfWindow.LocationChanged += WindowLocationChanged;
             wpfWindow.SizeChanged += WindowSizeChanged;
@@ -54,22 +54,13 @@ namespace WindowChrome.Demo.Styles.VS2012
         {
             if (w.WindowStyle != WindowStyle.None) return;
             var containerBorder = (Border)w.Template.FindName("PART_WindowContainer", w);
-            if (w.WindowState == WindowState.Maximized)
-            {
-                // TODO: track Win+Shift+Left/Right move to another monitor
-                // Make sure window doesn't overlap with the taskbar
-                AdjustPaddingToWorkingArea(w, containerBorder);
-            }
-            else
-            {
-                containerBorder.Padding = Hacks.MaximizedWindowBorder();
-            }
+            AdjustPadding(w, containerBorder);
         }
 
         static bool adjustmentInProgress = false;
         static object adjustmentLock = new object();
 
-        static void AdjustPaddingToWorkingArea(Window window, Border border)
+        static void AdjustPadding(Window window, Border border)
         {
             lock (adjustmentLock)
             {
@@ -77,27 +68,126 @@ namespace WindowChrome.Demo.Styles.VS2012
                 adjustmentInProgress = true;
             }
 
-            border.Dispatcher.BeginInvoke(
+            window.Dispatcher.BeginInvoke(
                 System.Windows.Threading.DispatcherPriority.ApplicationIdle,
                 new Action(() =>
                     {
-                        System.Threading.Thread.Sleep(50);
-                        var screen = ScreenFromWpfWindow(window);
-                        var wa = screen.WorkingArea;
-                        var nw = border.PointToScreen(new Point(border.Padding.Left, border.Padding.Top));
-                        var se = border.PointToScreen(new Point(border.ActualWidth - border.Padding.Right, border.ActualHeight - border.Padding.Bottom));
-                        var delta = new Thickness(
-                            wa.Left - nw.X,
-                            wa.Top - nw.Y,
-                            se.X - wa.Right,
-                            se.Y - wa.Bottom);
-                        var p = border.Padding.Add(delta);
-                        border.Padding = (p.Left >= 0 && p.Top >= 0 && p.Right >= 0 && p.Bottom >= 0)
-                            ? p
-                            : MaximizedWindowBorder();
-
+                        // Ignore adjustment requests fired in rapid sequence.
+                        // Current implementation won't support multiple windows per AppDomain,
+                        // with more than one top-level window simultaneously re-positioned.
+                        System.Threading.Thread.Sleep(10);
+                        var snap = AdjustPaddingToSnappingArea(window, border);
+                        if (snap != SnapSide.None && OnAfterSnapping != null) OnAfterSnapping(snap);
                         adjustmentInProgress = false;
                     }));
+        }
+
+        public enum SnapSide
+        {
+            None,
+            Fill,
+            LeftHalf,
+            RightHalf,
+            UpDown,
+        }
+
+        public static event Action<SnapSide> OnAfterSnapping;
+
+        static Rect ActualRectOnScreen(this FrameworkElement element)
+        {
+            return new Rect(element.PointToScreen(new Point(0, 0)),
+                element.PointToScreen(new Point(element.ActualWidth, element.ActualHeight)));
+        }
+
+        static SnapSide AdjustPaddingToSnappingArea(Window window, Border border)
+        {
+            var screen = ScreenFromWpfWindow(window);
+            var outer = border.ActualRectOnScreen();
+            var snap = ShouldSnap(screen, window, outer);
+            var regularBorder = MaximizedWindowBorder();
+            Thickness targetThickness;
+            if (snap == SnapSide.None)
+            {
+                targetThickness = regularBorder;
+            }
+            else
+            {
+                var targetRect = GetSnapRect(snap, screen.WorkingArea, outer);
+                targetThickness = outer.GetThickessToInnerRect(targetRect);
+                if (snap != SnapSide.Fill)
+                {
+                    // adjust left and right sides to keep custom visual
+                    if (snap == SnapSide.UpDown || snap == SnapSide.LeftHalf) targetThickness.Right = regularBorder.Right;
+                    if (snap == SnapSide.UpDown || snap == SnapSide.RightHalf) targetThickness.Left = regularBorder.Left;
+                }
+            }
+
+            if (border.Padding != targetThickness) border.Padding = targetThickness;
+
+            return snap;
+        }
+
+        static bool Within(this double value, double position, double negativeDelta, double positiveDelta)
+        {
+            return value >= position - negativeDelta && value <= position + positiveDelta;
+        }
+
+        static Thickness GetThickessToInnerRect(this Rect outerRect, Rect innerRect)
+        {
+            return new Thickness {
+                Left = Math.Max(0, innerRect.Left - outerRect.Left),
+                Top = Math.Max(0, innerRect.Top - outerRect.Top),
+                Right = Math.Max(0, outerRect.Right - innerRect.Right),
+                Bottom = Math.Max(0, outerRect.Bottom - innerRect.Bottom),
+            };
+        }
+
+        static SnapSide ShouldSnap(Screen screen, Window window, Rect rect)
+        {
+            // Check if window is close to a snap position on the screen.
+            var waSnapping = ShouldSnapToArea(screen.WorkingArea, rect);
+            if (waSnapping != SnapSide.None) return waSnapping;
+            // also WPF may ignore the WorkingArea and take over an entire screen instead.
+            // If this happens, the window may be in a snap position relative to Bounds.
+            var boundsSnapping = ShouldSnapToArea(screen.Bounds, rect);
+            return boundsSnapping;
+        }
+
+        static SnapSide ShouldSnapToArea(System.Drawing.Rectangle area, Rect rect)
+        {
+            var midX = 0.5 * (area.Left + area.Right);
+
+            bool w = rect.Left.Within(area.Left, 7.1, 1.1);
+            bool n = rect.Top.Within(area.Top, 7.1, 1.1);
+            bool e = rect.Right.Within(area.Right, 1.1, 7.1);
+            bool s = rect.Bottom.Within(area.Bottom, 1.1, 7.1);
+
+            bool wm = rect.Left.Within(midX, 10, 10);
+            bool em = rect.Right.Within(midX, 10, 10);
+
+            if (w && n && e && s) return SnapSide.Fill;
+            if (w && n && s && em) return SnapSide.LeftHalf;
+            if (e && n && s && wm) return SnapSide.RightHalf;
+            if (n && s) return SnapSide.UpDown;
+
+            return SnapSide.None;
+        }
+
+        static Rect GetSnapRect(SnapSide snap, System.Drawing.Rectangle area, Rect original = new Rect())
+        {
+            switch (snap)
+            {
+                case SnapSide.Fill:
+                    return new Rect(area.Left, area.Top, area.Width, area.Height);
+                case SnapSide.LeftHalf:
+                    return new Rect(area.Left, area.Top, Math.Floor(0.5 * area.Width), area.Height);
+                case SnapSide.RightHalf:
+                    return new Rect(Math.Ceiling(0.5 * (area.Left + area.Right)), area.Top, Math.Floor(0.5 * area.Width), area.Height);
+                case SnapSide.UpDown:
+                    return new Rect(original.Left, area.Top, original.Width, area.Height);
+                default:
+                    return original;
+            }
         }
 
         /// <summary>
@@ -122,6 +212,10 @@ namespace WindowChrome.Demo.Styles.VS2012
 
         static Thickness MaximizedWindowBorder()
         {
+            // MAximized WPF window extends past the screen bounds. 
+            // This seems to match system metrics below, but needs further verification.
+            // 0.5 * (SystemParameters.MaximizedPrimaryScreenHeight - SystemParameters.WorkArea.Height) - SystemParameters.BorderWidth
+            // 0.5 * (SystemParameters.MaximizedPrimaryScreenWidth - SystemParameters.WorkArea.Width) - SystemParameters.BorderWidth
             return new Thickness(7, 7, 7, 5);
         }
 

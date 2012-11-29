@@ -20,6 +20,12 @@
                 <ResizeGrip Opacity="0.75" />
             </StatusBarItem>
         </StatusBar>
+        <ListBox
+            DockPanel.Dock="Bottom"
+            MinHeight="64"
+            Margin="4 0 4 4"
+            ItemsSource="{Binding Entries}"
+            />
         <TextBox
             Text="Hello, world!"
             FontSize="13"

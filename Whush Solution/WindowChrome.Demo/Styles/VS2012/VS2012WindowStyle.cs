@@ -28,8 +28,8 @@ namespace WindowChrome.Demo.Styles.VS2012
     {
         void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            Hacks.FixWpfMaximizePositioning((Window)sender);
             Hacks.FixWpfMaximizeTaskbar((Window)sender);
+            Hacks.FixWpfPositioning((Window)sender);
         }
 
         void IconMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
