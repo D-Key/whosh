@@ -20,12 +20,59 @@
                 <ResizeGrip Opacity="0.75" />
             </StatusBarItem>
         </StatusBar>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="New" />
+                <MenuItem Header="Open" />
+                <MenuItem Header="Save" />
+                <Separator />
+                <MenuItem Header="Exit" />
+            </MenuItem>
+            <MenuItem Header="_Edit" />
+            <MenuItem Header="_View" />
+            <MenuItem Header="_Styles">
+                <MenuItem Header="Item 1" />
+                <MenuItem Header="Item 2 (checkable)" IsCheckable="True" />
+                <MenuItem Header="Item 3 (checked)" IsChecked="True" />
+                <MenuItem Header="_Submenu">
+                    <MenuItem Header="Subitem" />
+                    <MenuItem Header="Submenu 1">
+                        <MenuItem Header="Item 1.1" />
+                    </MenuItem>
+                    <MenuItem Header="Submenu 2">
+                        <MenuItem Header="Item 2.1" />
+                        <MenuItem Header="Item 2.2" />
+                    </MenuItem>
+                    <MenuItem Header="Submenu 3">
+                        <MenuItem Header="Item 3.1" />
+                        <MenuItem Header="Item 3.2" />
+                        <MenuItem Header="Item 3.3" />
+                    </MenuItem>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Window">
+                <MenuItem Header="Window _0" Padding="100" />
+                <MenuItem Header="Window _1" Padding="100" />
+                <MenuItem Header="Window _2" Padding="100" />
+                <MenuItem Header="Window _3" Padding="100" />
+                <MenuItem Header="Window _4" Padding="100" />
+                <MenuItem Header="Window _5" Padding="100" />
+                <MenuItem Header="Window _6" Padding="100" />
+                <MenuItem Header="Window _7" Padding="100" />
+                <MenuItem Header="Window _8" Padding="100" />
+                <MenuItem Header="Window _9" Padding="100" />
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="?" />
+        </Menu>
+        <!--
         <ListBox
             DockPanel.Dock="Bottom"
             MinHeight="64"
             Margin="4 0 4 4"
             ItemsSource="{Binding Entries}"
             />
+        -->
         <TextBox
             Text="Hello, world!"
             FontSize="13"

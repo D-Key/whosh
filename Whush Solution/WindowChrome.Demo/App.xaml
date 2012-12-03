@@ -6,7 +6,12 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles/VS2012/VS2012WindowStyle.xaml" />
+                <ResourceDictionary Source="Styles/VS2012/MyStyle.xaml" />
+                <!--
+                <ResourceDictionary>
+                    <SolidColorBrush x:Key="MenuItemPressedFill" Color="#662222FF" />
+                </ResourceDictionary>
+                -->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -157,10 +157,10 @@ namespace WindowChrome.Demo.Styles.VS2012
         {
             var midX = 0.5 * (area.Left + area.Right);
 
-            bool w = rect.Left.Within(area.Left, 7.1, 1.1);
-            bool n = rect.Top.Within(area.Top, 7.1, 1.1);
-            bool e = rect.Right.Within(area.Right, 1.1, 7.1);
-            bool s = rect.Bottom.Within(area.Bottom, 1.1, 7.1);
+            bool w = rect.Left.Within(area.Left, 8.1, 1.1);
+            bool n = rect.Top.Within(area.Top, 8.1, 1.1);
+            bool e = rect.Right.Within(area.Right, 1.1, 8.1);
+            bool s = rect.Bottom.Within(area.Bottom, 1.1, 8.1);
 
             bool wm = rect.Left.Within(midX, 10, 10);
             bool em = rect.Right.Within(midX, 10, 10);
