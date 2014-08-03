@@ -64,7 +64,7 @@
                     -->
                     <Border
                         x:Name="PART_Container"
-                        Padding="7 7 7 5"
+                        Padding="7 7 5 5"
                         >
                     <Grid
                         TextOptions.TextRenderingMode="ClearType"
@@ -76,6 +76,7 @@
                             Background="#EFEFF2"
                             BorderBrush="{StaticResource VS2012WindowBorderBrush}"
                             BorderThickness="1"
+                            MouseMove="TitleBarMouseMove"
                             Padding="0">
                             <DockPanel
                                 HorizontalAlignment="Stretch"
